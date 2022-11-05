@@ -1,5 +1,6 @@
 const { Router } = require('express');
-const { crearUsuario , loginUsuario, revalidarToken } = require('../controllers/auth');
+const { check } = require('express-validator');
+const { crearUsuario, loginUsuario, revalidarToken } = require('../controllers/auth');
 
 const router = Router();
 
@@ -8,9 +9,11 @@ const router = Router();
 router.post('/new', crearUsuario);
 
 //Login de usuario
-router.post('/', loginUsuario);
+router.post('/',[
+    check('email','el email es obligatorio').isEmail(), check('password','la contrasena es obligatoria').isLength({min:6})
+], loginUsuario);
 //Validar token
-router.get('/renew',revalidarToken);
+router.get('/renew', revalidarToken);
 
 
 
